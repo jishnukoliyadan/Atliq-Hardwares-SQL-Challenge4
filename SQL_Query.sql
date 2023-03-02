@@ -61,11 +61,30 @@
 
 # ----------------------------------------------------------------------------------------------------------------------- #
 
-# 6. Generate a report which contains the top 5 customers who received an average high pre_invoice_discount_pct for the
-#    fiscal year 2021 and in the Indian market.
-SELECT fd.customer_code, customer, pre_invoice_discount_pct FROM fact_pre_invoice_deductions fd
-    JOIN dim_customer dc
-    ON fd.customer_code = dc.customer_code
-    WHERE market = "India"
-    ORDER BY pre_invoice_discount_pct DESC
-    LIMIT 5;
+-- # 6. Generate a report which contains the top 5 customers who received an average high pre_invoice_discount_pct for the
+-- #    fiscal year 2021 and in the Indian market.
+-- SELECT fd.customer_code, customer, pre_invoice_discount_pct FROM fact_pre_invoice_deductions fd
+--     JOIN dim_customer dc
+--     ON fd.customer_code = dc.customer_code
+--     WHERE market = "India"
+--     ORDER BY pre_invoice_discount_pct DESC
+--     LIMIT 5;
+
+# ----------------------------------------------------------------------------------------------------------------------- #
+
+# 7. Get the complete report of the Gross sales amount for the customer “Atliq Exclusive” for each month.
+#    This analysis helps to get an idea of low and high-performing months and take strategic decisions.
+WITH gross_sales_table AS (
+        SELECT date, fm.customer_code, fp.fiscal_year, gross_price * sold_quantity AS gross_sales FROM fact_gross_price fp
+            JOIN fact_sales_monthly fm
+            ON fm.product_code = fp.product_code
+            AND fm.fiscal_year = fp.fiscal_year),
+
+    customer_sort AS (
+        SELECT date, dc.customer_code, gross_sales FROM gross_sales_table gt
+            JOIN dim_customer dc
+            ON gt.customer_code = dc.customer_code
+            WHERE customer = "Atliq Exclusive")
+
+SELECT MONTH(date) AS Month, YEAR(date) AS Year, ROUND(SUM(gross_sales) / 1000000, 2) AS Gross_sales_Amount FROM customer_sort
+        GROUP BY Month, Year;
