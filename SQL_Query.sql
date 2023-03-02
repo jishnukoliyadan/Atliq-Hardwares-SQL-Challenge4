@@ -6,16 +6,23 @@ USE gdb023;
 
 # ----------------------------------------------------------------------------------------------------------------------- #
 
-# 2. What is the percentage of unique product increase in 2021 vs. 2020?
-WITH fy20 AS (
-        SELECT COUNT(DISTINCT(product_code)) AS up_20 FROM fact_sales_monthly
-            WHERE fiscal_year = 2020),
+-- # 2. What is the percentage of unique product increase in 2021 vs. 2020?
+-- WITH fy20 AS (
+--         SELECT COUNT(DISTINCT(product_code)) AS up_20 FROM fact_sales_monthly
+--             WHERE fiscal_year = 2020),
             
-    fy21 AS (
-        SELECT COUNT(DISTINCT(product_code)) AS up_21 FROM fact_sales_monthly
-            WHERE fiscal_year = 2021)
+--     fy21 AS (
+--         SELECT COUNT(DISTINCT(product_code)) AS up_21 FROM fact_sales_monthly
+--             WHERE fiscal_year = 2021)
             
-SELECT fy20.up_20 AS unique_products_2020,
-    fy21.up_21 AS unique_products_2021,
-    ROUND((fy21.up_21-fy20.up_20) * 100/fy20.up_20, 2) as percentage_chg
-    FROM fy20, fy21;
+-- SELECT fy20.up_20 AS unique_products_2020,
+--     fy21.up_21 AS unique_products_2021,
+--     ROUND((fy21.up_21-fy20.up_20) * 100/fy20.up_20, 2) as percentage_chg
+--     FROM fy20, fy21;
+
+# ----------------------------------------------------------------------------------------------------------------------- #
+
+# 3. Provide a report with all the unique product counts for each segment and sort them in descending order of product counts.
+SELECT segment, count(product) AS product_count FROM dim_product
+    GROUP BY segment
+    ORDER BY product_count DESC;
