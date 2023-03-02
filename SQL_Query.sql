@@ -72,19 +72,37 @@
 
 # ----------------------------------------------------------------------------------------------------------------------- #
 
-# 7. Get the complete report of the Gross sales amount for the customer “Atliq Exclusive” for each month.
-#    This analysis helps to get an idea of low and high-performing months and take strategic decisions.
-WITH gross_sales_table AS (
-        SELECT date, fm.customer_code, fp.fiscal_year, gross_price * sold_quantity AS gross_sales FROM fact_gross_price fp
-            JOIN fact_sales_monthly fm
-            ON fm.product_code = fp.product_code
-            AND fm.fiscal_year = fp.fiscal_year),
+-- # 7. Get the complete report of the Gross sales amount for the customer “Atliq Exclusive” for each month.
+-- #    This analysis helps to get an idea of low and high-performing months and take strategic decisions.
+-- WITH gross_sales_table AS (
+--         SELECT date, fm.customer_code, fp.fiscal_year, gross_price * sold_quantity AS gross_sales FROM fact_gross_price fp
+--             JOIN fact_sales_monthly fm
+--             ON fm.product_code = fp.product_code
+--             AND fm.fiscal_year = fp.fiscal_year),
 
-    customer_sort AS (
-        SELECT date, dc.customer_code, gross_sales FROM gross_sales_table gt
-            JOIN dim_customer dc
-            ON gt.customer_code = dc.customer_code
-            WHERE customer = "Atliq Exclusive")
+--     customer_sort AS (
+--         SELECT date, dc.customer_code, gross_sales FROM gross_sales_table gt
+--             JOIN dim_customer dc
+--             ON gt.customer_code = dc.customer_code
+--             WHERE customer = "Atliq Exclusive")
 
-SELECT MONTH(date) AS Month, YEAR(date) AS Year, ROUND(SUM(gross_sales) / 1000000, 2) AS Gross_sales_Amount FROM customer_sort
-        GROUP BY Month, Year;
+-- SELECT MONTH(date) AS Month, YEAR(date) AS Year, ROUND(SUM(gross_sales) / 1000000, 2) AS Gross_sales_Amount FROM customer_sort
+--         GROUP BY Month, Year;
+
+# ----------------------------------------------------------------------------------------------------------------------- #
+
+# 8. In which quarter of 2020, got the maximum total_sold_quantity?
+WITH quarter AS (
+    SELECT sold_quantity,
+        CASE
+            WHEN MONTH(date) BETWEEN 09 AND 11 THEN "Q1"
+            WHEN MONTH(date) IN (12, 01, 02) THEN "Q2"
+            WHEN MONTH(date) BETWEEN 03 AND 05 THEN "Q3"
+            WHEN MONTH(date) BETWEEN 06 AND 08 THEN "Q4"
+        END as Quarter
+    FROM fact_sales_monthly
+        WHERE fiscal_year = 2020)
+
+SELECT Quarter, SUM(sold_quantity) AS total_sold_quantity FROM quarter
+    GROUP BY Quarter
+    ORDER BY total_sold_quantity DESC;
