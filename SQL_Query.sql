@@ -18,7 +18,7 @@ WITH fy20 AS (
             
 SELECT fy20.up_20 AS unique_products_2020,
     fy21.up_21 AS unique_products_2021,
-    ROUND((fy21.up_21-fy20.up_20) * 100/fy20.up_20, 2) as percentage_chg
+    CONCAT(ROUND((fy21.up_21-fy20.up_20) * 100/fy20.up_20, 2), ' %') as percentage_chg
     FROM fy20, fy21;
 
 # ----------------------------------------------------------------------------------------------------------------------- #
@@ -53,7 +53,7 @@ SELECT fy20.segment, seg20 AS product_count_2020, seg21 AS product_count_2021, s
 # ----------------------------------------------------------------------------------------------------------------------- #
 
 # 5. Get the products that have the highest and lowest manufacturing costs.
-SELECT fc.product_code, product, manufacturing_cost FROM fact_manufacturing_cost as fc
+SELECT fc.product_code, product, CONCAT(manufacturing_cost, '/unit') AS manufacturing_cost FROM fact_manufacturing_cost as fc
     JOIN dim_product as dp
     ON fc.product_code = dp.product_code
     WHERE fc.manufacturing_cost = (SELECT max(manufacturing_cost) FROM fact_manufacturing_cost) OR
@@ -64,10 +64,14 @@ SELECT fc.product_code, product, manufacturing_cost FROM fact_manufacturing_cost
 
 # 6. Generate a report which contains the top 5 customers who received an average high pre_invoice_discount_pct for the
 #    fiscal year 2021 and in the Indian market.
-SELECT fd.customer_code, customer, pre_invoice_discount_pct AS average_discount_percentage FROM fact_pre_invoice_deductions fd
+SELECT fd.customer_code,
+        customer,
+        ROUND(AVG(pre_invoice_discount_pct) * 100, 2) AS average_discount_percentage
+    FROM fact_pre_invoice_deductions fd
     JOIN dim_customer dc
     ON fd.customer_code = dc.customer_code
-    WHERE market = "India"
+    WHERE market = 'India' AND fd.fiscal_year = 2021
+    GROUP BY customer, fd.customer_code
     ORDER BY average_discount_percentage DESC
     LIMIT 5;
 
@@ -87,7 +91,7 @@ WITH gross_sales_table AS (
             ON gt.customer_code = dc.customer_code
             WHERE customer = "Atliq Exclusive")
 
-SELECT MONTH(date) AS Month, YEAR(date) AS Year, ROUND(SUM(gross_sales) / 1000000, 2) AS Gross_sales_Amount FROM customer_sort
+SELECT MONTH(date) AS Month, YEAR(date) AS Year, ROUND(SUM(gross_sales) / 1000000, 2) AS Gross_sales_Amount_mln FROM customer_sort
         GROUP BY Month, Year;
 
 # ----------------------------------------------------------------------------------------------------------------------- #
@@ -127,7 +131,7 @@ WITH gross_sale_table as (
         SELECT SUM(gross_sales_mln) as SUM_ FROM channel_table)
 
 SELECT ct.*,
-   ROUND(ct.gross_sales_mln * 100 / ts.SUM_, 3) AS percentage
+   CONCAT(ROUND(ct.gross_sales_mln * 100 / ts.SUM_, 2), ' %') AS percentage
    FROM channel_table ct, total_sum ts
    ORDER BY percentage DESC;
 
