@@ -1,4 +1,4 @@
-USE gdb023;
+-- USE gdb023;
 
 -- # 1. The list of markets in which customer "Atliq Exclusive" operates its business in the APAC region
 -- SELECT DISTINCT(market) FROM dim_customer
@@ -22,7 +22,29 @@ USE gdb023;
 
 # ----------------------------------------------------------------------------------------------------------------------- #
 
-# 3. Provide a report with all the unique product counts for each segment and sort them in descending order of product counts.
-SELECT segment, count(product) AS product_count FROM dim_product
-    GROUP BY segment
-    ORDER BY product_count DESC;
+-- # 3. Provide a report with all the unique product counts for each segment and sort them in descending order of product counts.
+-- SELECT segment, count(product) AS product_count FROM dim_product
+--     GROUP BY segment
+--     ORDER BY product_count DESC;
+
+# ----------------------------------------------------------------------------------------------------------------------- #
+
+# 4. Follow-up: Which segment had the most increase in unique products in 2021 vs 2020?
+WITH fy20 AS(
+        SELECT segment, COUNT(DISTINCT(fm.product_code)) AS seg20 FROM fact_sales_monthly fm
+            JOIN dim_product dp
+            ON fm.product_code = dp.product_code
+            WHERE fiscal_year = 2020
+            GROUP BY dp.segment),
+            
+    fy21 AS(
+        SELECT segment, COUNT(DISTINCT(fm.product_code)) AS seg21 FROM fact_sales_monthly fm
+            JOIN dim_product dp
+            ON fm.product_code = dp.product_code
+            WHERE fiscal_year = 2021
+            GROUP BY dp.segment)
+            
+SELECT fy20.segment, seg20 AS product_count_2020, seg21 AS product_count_2021, seg21-seg20 AS difference FROM fy20
+    JOIN fy21
+    ON fy20.segment = fy21.segment
+    ORDER BY difference DESC;
