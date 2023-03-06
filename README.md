@@ -57,7 +57,7 @@ We can utilize the [MySQL python library](https://pypi.org/project/mysql-connect
 **A sample slide from presentation**
 
 <p><a href = 'https://github.com/jishnukoliyadan/Atliq-Hardwares-SQL-Challenge4/blob/master/Presentation.pdf' target = '_blank'> 
-<img src = 'images/sample_slide.svg' alt = 'sample slide from presentation'>
+<img src = 'images/sample_slide.jpg' alt = 'sample slide from presentation'>
 </a></p>
 
 - The presentations to the top-level management is stored in [Presentation.pdf](Presentation.pdf) as PDF version and [Presentation.pptx](Presentation.pptx) for powerpoint version.
