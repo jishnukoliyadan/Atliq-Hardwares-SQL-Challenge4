@@ -54,18 +54,44 @@ We can utilize the [MySQL python library](https://pypi.org/project/mysql-connect
 
 ### Presentations
 
-![](images/plots/platform_vs_sales.png)
+**A sample slide from presentation**
+
+<p><a href = 'https://github.com/jishnukoliyadan/Atliq-Hardwares-SQL-Challenge4/blob/master/Presentation.pdf' target = '_blank'> 
+<img src = 'images/sample_slide.svg' alt = 'sample slide from presentation'>
+</a></p>
 
 - The presentations to the top-level management is stored in [Presentation.pdf](Presentation.pdf) as PDF version and [Presentation.pptx](Presentation.pptx) for powerpoint version.
 - The plots for the presentations was made using Plotly viisualization. The notebook used to create plots is [Presentation_plots.ipynb](Presentation_plots.ipynb).
-    
+  
     - NOTE : This notebook is not a rendered one. Due to upload size restriction GitHub rejected the rendered one.
 
 **NOTE**
 
-More details of the problem statement and data is available at [codebasics.io](https://codebasics.io/challenge/codebasics-resume-project-challenge)
+1. More details of the problem statement and data is available at [codebasics.io](https://codebasics.io/challenge/codebasics-resume-project-challenge)
+
+2. **`credentials.py`** only contains MySQL root password, it is created to protect the password. Bellow code shows what contains inside **`credentials.py`** file.
+
+```py
+db_password = 'Type-your-MySQL-root-password-here'
+```
+
+3. In **`DB_to_CSV.py`** file, the MySQL password entered as,
+
+```py
+from credentials import db_password
+
+mydb = mysql.connector.connect(host = 'localhost', user = 'root',
+                        password = db_password, database = 'gdb023')
+                        
+cursorObject = mydb.cursor()
+```
+
+## Certificate of Appreciation from [codebasics.io](https://codebasics.io/)
+
+<p><a href = 'https://codebasics.io/download-certificate-pdf/CH-1-7-61907' target = '_blank'> 
+<img src = 'images/Certificate_of_Appreciation_CH-1-7-61907.jpg' alt = 'sample slide from presentation'>
+</a></p>
 
 ## License
 
 The license can be found in the [LICENSE](LICENSE) file.
-
