@@ -20,15 +20,22 @@ Consumer Goods | Function : Excecutive Management
 
 ## **Querying Solutions**
 
-I've used **MySQL** to query the data base. The database file is available in [atliq_hardware_db.sql](RAW_Files/atliq_hardware_db.sql) file. To convert this SQL file into MySQL database, run the bellow codes.
+I've used **MySQL** to query the data base. The database file is available in [atliq_hardware_db.sql](RAW_Files/atliq_hardware_db.sql) file.
 
-### 1. Database creation
+### 1. Data Model
+
+<img src = 'images/data_model.jpg' alt = 'Data Model' target = '_blank' width = 70%>
+
+### 2. Database creation
+
+To convert this [atliq_hardware_db.sql](RAW_Files/atliq_hardware_db.sql) file into MySQL database, run the bellow codes.
+
 1. Connect to MySQL Server using terminal using `mysql -u root -p` and enter the *password*.
 2. Once the connection is sucessfull type, `source RAW_Files/atliq_hardware_db.sql` to generate Atliq Hardware's database.
 
-![Steps to connect and create database in MySQL via terminal - Ubuntu](images/MySQL-Terminal.png)
+<img src = 'images/MySQL-Terminal.png' alt = 'Steps to connect and create database in MySQL via terminal - Ubuntu' target = '_blank' width = 70%>
 
-### 2. SQL Query
+### 3. SQL Query
 
 #### Method 1 : Using SQL File
 
@@ -38,7 +45,7 @@ We can use the [SQL_Query.sql](SQL_Query.sql) to run all the queries using MySQL
 source SQL_Query.sql
 ```
 
-![How to run SQL_Query.sql using terminal](images/MySQL-Querying.png)
+<img src = 'images/MySQL-Querying.png' alt = 'How to run SQL_Query.sql using terminal' target = '_blank' width = 70%>
 
 #### Method 2 : Using Python
 
@@ -57,7 +64,7 @@ We can utilize the [MySQL python library](https://pypi.org/project/mysql-connect
 **A sample slide from presentation**
 
 <p><a href = 'https://github.com/jishnukoliyadan/Atliq-Hardwares-SQL-Challenge4/blob/master/Presentation.pdf' target = '_blank'> 
-<img src = 'images/sample_slide.jpg' alt = 'sample slide from presentation'>
+<img src = 'images/sample_slide.jpg' alt = 'sample slide from presentation' width = 85%>
 </a></p>
 
 - The presentations to the top-level management is stored in [Presentation.pdf](Presentation.pdf) as PDF version and [Presentation.pptx](Presentation.pptx) for powerpoint version.
@@ -89,7 +96,7 @@ cursorObject = mydb.cursor()
 ## Certificate of Appreciation from [codebasics.io](https://codebasics.io/)
 
 <p><a href = 'https://codebasics.io/download-certificate-pdf/CH-1-7-61907' target = '_blank'> 
-<img src = 'images/Certificate_of_Appreciation_CH-1-7-61907.jpg' alt = 'sample slide from presentation'>
+<img src = 'images/Certificate_of_Appreciation_CH-1-7-61907.jpg' alt = 'sample slide from presentation' width = 70%>
 </a></p>
 
 ## License
